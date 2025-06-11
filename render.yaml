@@ -3,7 +3,7 @@ services:
     name: fir-legal-backend
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: python app_render.py
+    startCommand: python app_render_fixed.py
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.5
