@@ -6,4 +6,5 @@ sentence-transformers==2.2.2
 huggingface-hub==0.16.4
 pandas==2.2.2
 torch==2.4.0
-numpy==1.26.4 
+numpy==1.26.4
+gunicorn==21.2.0 

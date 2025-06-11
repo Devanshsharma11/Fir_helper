@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import re
+import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
@@ -15,6 +16,14 @@ import sys
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
+# Download NLTK data for deployment
+try:
+    nltk.download('punkt', quiet=True)
+    nltk.download('stopwords', quiet=True)
+    print("NLTK data downloaded successfully")
+except Exception as e:
+    print(f"Warning: Could not download NLTK data: {e}")
+
 # Text Preprocessing Function
 def preprocess_text(text):
     try:
@@ -28,7 +37,8 @@ def preprocess_text(text):
         return preprocessed_text
     except Exception as e:
         print(f"Error in preprocess_text: {str(e)}")
-        return text.lower()  # Fallback to simple lowercase
+        # Fallback to simple preprocessing
+        return text.lower().replace('.', ' ').replace(',', ' ')
 
 # Global variables for model and dataset
 vectorizer = None
@@ -67,6 +77,7 @@ def load_model_and_data():
 def suggest_sections(complaint, dataset, min_suggestions=5):
     try:
         preprocessed_complaint = preprocess_text(complaint)
+        print(f"Preprocessed complaint: {preprocessed_complaint}")
         
         # Transform the complaint and dataset
         complaint_vector = vectorizer.transform([preprocessed_complaint])
