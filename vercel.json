@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "lawsmart-section-finder/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/lawsmart-section-finder/$1"
+    }
+  ],
+  "env": {
+    "REACT_APP_API_URL": "https://your-backend-url.railway.app"
+  }
+} 
