@@ -2,6 +2,18 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import re
 import nltk
+import os
+import sys
+import traceback
+
+# Download NLTK data for deployment - do this before imports
+try:
+    nltk.download('punkt', quiet=True)
+    nltk.download('stopwords', quiet=True)
+    print("NLTK data downloaded successfully")
+except Exception as e:
+    print(f"Warning: Could not download NLTK data: {e}")
+
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
@@ -9,20 +21,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import pandas as pd
 import pickle
-import os
-import traceback
-import sys
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
-
-# Download NLTK data for deployment
-try:
-    nltk.download('punkt', quiet=True)
-    nltk.download('stopwords', quiet=True)
-    print("NLTK data downloaded successfully")
-except Exception as e:
-    print(f"Warning: Could not download NLTK data: {e}")
 
 # Text Preprocessing Function
 def preprocess_text(text):
@@ -110,7 +111,7 @@ def suggest_sections(complaint, dataset, min_suggestions=5):
 @app.route('/', methods=['GET'])
 def root():
     return jsonify({
-        'message': 'FIR Legal Section Recommender API',
+        'message': 'FIR Legal Section Recommender API (NLP Version)',
         'status': 'running',
         'endpoints': {
             'health': '/api/health',
